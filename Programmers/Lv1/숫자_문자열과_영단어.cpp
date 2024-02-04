@@ -1,83 +1,62 @@
 #include <string>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
 int solution(string s) {
-    int answer = 0;
-    int length = 0;
-    vector<string> v;
     string sAnswer;
-
-    for (int i = 0; i < s.size(); i+=length)
+    string::iterator iter = s.begin(); 
+    while(iter != s.end())
     {
-        if (isdigit(s[i])) {
-            sAnswer += s[i];
-            length = 1;
+        if (!isdigit(*iter)) {
+            switch (*iter) {
+            case 'z': // zero
+                sAnswer += '0';
+                break;
+            case 'o': // one
+                sAnswer += '1';
+                break;
+            case 't':
+                if ('w' == *(iter + 1)) // two
+                    sAnswer += '2';
+                else // three
+                    sAnswer += '3';
+                break;
+            case 'f':
+                if ('o' == *(iter + 1)) // four
+                    sAnswer += '4';
+                else // five
+                    sAnswer += '5';
+                break;
+            case 's':
+                if ('i' == *(iter + 1)) // six
+                    sAnswer += '6';
+                else // seven
+                    sAnswer += '7';
+                break;
+            case 'e': // eight
+                sAnswer += '8';
+                break;
+            case 'n': // nine
+                sAnswer += '9';
+                break;
+            } // switch end
+        }
+        else { // digit
+            sAnswer += *iter;
+            s.erase(s.begin(), s.begin()+1);
             continue;
         }
-
-        else if ('z' == s[i])
-        {
-            sAnswer += '0';
-            length = 1;
-            //i += 4;
-        }
-        else if ('o' == s[i])
-        {
-            sAnswer += '1';
-            length = 3;
-            //i += 2;
-        }
-        else if ('t' == s[i] && 'w' == s[i + 1])
-        {
-            sAnswer += '2';
-            i += 3;
-        }
-        else if ('t' == s[i] && 'h' == s[i + 1])
-        {
-            sAnswer += '3';
-            i += 5;
-        }
-        else if ('f' == s[i] && 'o' == s[i + 1])
-        {
-            sAnswer += '4';
-            length = 4;
-            //i += 4;
-        }
-        else if ('f' == s[i] && 'i' == s[i + 1])
-        {
-            sAnswer += '5';
-            i += 4;
-        }
-        else if ('s' == s[i] && 'i' == s[i + 1])
-        {
-            sAnswer += '6';
-            i += 3;
-        }
-        else if ('s' == s[i] && 'e' == s[i + 1])
-        {
-            sAnswer += '7';
-            length = 5;
-            //i += 5;
-        }
-        else if ('e' == s[i])
-        {
-            sAnswer += '8';
-            length = 5;
-            //i += 5;
-        }
-        else if ('n' == s[i])
-        {
-            sAnswer += '9';
-            i += 4;
-        }
+        if ('1' == sAnswer.back() || '2' == sAnswer.back() || '6' == sAnswer.back())
+            s.erase(s.begin(), s.begin()+3);
+        else if ('0' == sAnswer.back() || '4' == sAnswer.back() || '9' == sAnswer.back())
+            s.erase(s.begin(), s.begin()+4);
+        else if ('3' == sAnswer.back() || '5' == sAnswer.back() || '7' == sAnswer.back() || '8' == sAnswer.back())
+            s.erase(s.begin(), s.begin()+5);
     }
-        answer = stoi(sAnswer);
-        return answer;
+    return stoi(sAnswer);
 }
 
 void main() {
-    solution("one4seveneight");
+    solution("123");
 }
