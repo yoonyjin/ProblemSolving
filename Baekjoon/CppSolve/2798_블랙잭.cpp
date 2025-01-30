@@ -1,40 +1,53 @@
 #include <iostream>
-#include <vector>
 #include <set>
-
-const unsigned int MaxSum = 21;
 
 using namespace std;
 int main()
 {
-	set<unsigned int> CardSet;
-	//vector<unsigned int> CardVec = {};
+	int* CardsArr;
 
-	unsigned int Sum = 0;
-	unsigned int N = 0, M = 0;
-	unsigned int CardNum = 0;
+	int Sum = 0;
+	int N = 0, M = 0;
+	int CardNum = 0;
+	int AllCardSum = 0;
 
 	cin >> N >> M;
 
-	// 카드 : 양의정수
-	// N개의 카드의 숫자공개
+	CardsArr = new int[N];
 
+	// 카드 : 양의정수
+	// N개의 카드의 숫자공개, M : MaxSum, 10 <= M <= 300,000
+	// 3 <= N <= 100
 	for (int i = 0; i < N; i++)
 	{
 		cin >> CardNum;
-		CardSet.insert(CardNum);
+		CardsArr[i] = CardNum;
+		AllCardSum += CardNum;
 	}
 
+	// 삭제) 이거 빼도 성능에 큰 차이 없다
+	// 모든 카드의 숫자를 합해도 M보다 작을 수 있으므로
+	// 최대 합계값을 업데이트해줌
+	//if (AllCardSum < M)
+	//	M = AllCardSum;
 
-	for (int num : CardSet)
+	int MedSum = 0;
+	for (int i = 0; i < N - 2; i++)
 	{
-		cout << num << ", ";
+		for (int j = i + 1; j < N - 1; j++)
+		{
+			for (int k = j + 1; k < N; k++)
+			{
+				MedSum = CardsArr[i] + CardsArr[j] + CardsArr[k];
+
+				if (MedSum > Sum && MedSum <= M)
+					Sum = MedSum;
+			}
+		}
 	}
 
-	// 첫카드, 두번째카드, 세번째카드 각각 가리키는 Iterator 필요
-	// 각 Iterator 값을 더한 sum
-
-	cout << "\n";
-
+	cout << Sum;
+	//cout << "결과값: " << Sum << "\n";
+	delete[]CardsArr;
 	return 0;
 }
